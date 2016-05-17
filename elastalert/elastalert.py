@@ -426,7 +426,6 @@ class ElastAlerter():
                         return None
         except (ElasticsearchException, KeyError) as e:
             self.handle_error('Error querying for last run: %s' % (e), {'rule': rule['name']})
-            self.writeback_es = None
 
     def set_starttime(self, rule, endtime):
         """ Given a rule and an endtime, sets the appropriate starttime for it. """
@@ -1289,6 +1288,7 @@ class ElastAlerter():
         if data:
             body['data'] = data
         self.writeback('elastalert_error', body)
+        self.writeback_es = None
 
     def handle_uncaught_exception(self, exception, rule):
         """ Disables a rule and sends a notification. """
